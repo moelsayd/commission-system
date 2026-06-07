@@ -59,7 +59,7 @@ commission-app/
 
 1. **Clone the repository** (or copy all files into a directory):
    ```bash
-   git clone https://github.com/Shinigami/commission-app.git
+   git clone https://github.com/Shinigami/commission-system.git
    cd commission-app
 ```
 
