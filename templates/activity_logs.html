@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}سجل النشاط{% endblock %}
+{% block page_title %}سجل النشاط{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <span>آخر العمليات</span>
+    </div>
+    <div id="logsTable"></div>
+    <div id="pagination" class="pagination"></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+let currentPage = 1, perPage = 30;
+
+async function loadLogs(page=1) {
+    currentPage = page;
+    try {
+        const res = await API.get('/api/activity-logs', {page, per_page:perPage});
+        const cols = [
+            {key:'action', label:'الإجراء', render: r => {
+                const map = {create:'إنشاء', update:'تعديل', delete:'حذف'};
+                return map[r.action] || r.action;
+            }},
+            {key:'entity_type', label:'النوع', render: r => {
+                const map = {customer:'عميل', product:'منتج', supplier:'مورد', order:'طلب', purchase:'مشتريات', customer_payment:'دفعة عميل', supplier_payment:'دفعة مورد'};
+                return map[r.entity_type] || r.entity_type;
+            }},
+            {key:'details', label:'تفاصيل'},
+            {key:'created_at', label:'التاريخ', render: r => r.created_at?.slice(0,19)}
+        ];
+        renderTable('logsTable', cols, res.data, res.total, page, perPage, loadLogs, () => '');
+    } catch(e) { showToast(e.message, 'error'); }
+}
+document.addEventListener('DOMContentLoaded', () => loadLogs());
+</script>
+{% endblock %}

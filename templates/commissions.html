@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}العمولات{% endblock %}
+{% block page_title %}العمولات{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <input type="text" id="searchInput" placeholder="بحث..." class="search-input" oninput="loadCommissions()">
+    </div>
+    <div id="commissionsTable"></div>
+    <div id="pagination" class="pagination"></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+let currentPage = 1, perPage = 20;
+
+async function loadCommissions(page=1) {
+    currentPage = page;
+    const search = document.getElementById('searchInput').value;
+    try {
+        const res = await API.get('/api/commissions', {page, per_page:perPage, search});
+        const cols = [
+            {key:'customer_name', label:'العميل'},
+            {key:'total_amount', label:'إجمالي الطلب'},
+            {key:'commission_percent', label:'النسبة %'},
+            {key:'commission_amount', label:'العمولة'},
+            {key:'status', label:'الحالة', render: r => `<span class="status-badge status-${r.status}">${r.status}</span>`}
+        ];
+        renderTable('commissionsTable', cols, res.data, res.total, page, perPage, loadCommissions, () => '');
+    } catch(e) { showToast(e.message, 'error'); }
+}
+document.addEventListener('DOMContentLoaded', () => loadCommissions());
+</script>
+{% endblock %}

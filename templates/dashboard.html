@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}لوحة التحكم{% endblock %}
+{% block page_title %}لوحة التحكم{% endblock %}
+{% block content %}
+<div class="stats-grid" id="statsGrid"></div>
+<div class="card">
+    <h3>أحدث الطلبات</h3>
+    <div id="recentOrdersTable"></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const stats = await API.get('/api/dashboard/stats');
+        const grid = document.getElementById('statsGrid');
+        const cards = [
+            {label:'العملاء', value:stats.customers},
+            {label:'المنتجات', value:stats.products},
+            {label:'الطلبات', value:stats.orders},
+            {label:'طلبات نشطة', value:stats.pending_orders},
+            {label:'المبيعات', value:stats.total_sales + ' ج'},
+            {label:'العمولات', value:stats.total_commissions + ' ج'},
+            {label:'مخزون منخفض', value:stats.low_stock},
+            {label:'مدفوعات العملاء', value:stats.total_customer_payments + ' ج'},
+            {label:'مدفوعات الموردين', value:stats.total_supplier_payments + ' ج'}
+        ];
+        grid.innerHTML = cards.map(c => `<div class="stat-card"><div class="value">${c.value}</div><div class="label">${c.label}</div></div>`).join('');
+        const cols = [
+            {key:'name', label:'العميل'},
+            {key:'total_amount', label:'الإجمالي'},
+            {key:'status', label:'الحالة', render: r => `<span class="status-badge status-${r.status}">${r.status}</span>`}
+        ];
+        renderTable('recentOrdersTable', cols, stats.recent_orders, stats.recent_orders.length, 1, 5, ()=>{}, () => '');
+    } catch(e) { showToast(e.message, 'error'); }
+});
+</script>
+{% endblock %}

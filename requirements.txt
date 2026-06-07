@@ -1,0 +1,6 @@
+Flask
+Jinja2
+Werkzeug
+openpyxl
+fpdf2
+Pillow

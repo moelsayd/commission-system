@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}نظام إدارة العمولات{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="manifest" href="/manifest.json">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+</script>
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">📊 نظام العمولة</div>
+            <nav>
+                <a href="/">🏠 لوحة التحكم</a>
+                <a href="/customers">👥 العملاء</a>
+                <a href="/orders">📦 الطلبات</a>
+                <a href="/products">📋 المنتجات</a>
+                <a href="/suppliers">🤝 الموردين</a>
+                <a href="/purchases">📥 المشتريات</a>
+                <a href="/payments">💰 المدفوعات</a>
+                <a href="/commissions">💸 العمولات</a>
+                <a href="/reports">📈 التقارير</a>
+                <a href="/activity-logs">📜 سجل النشاط</a>
+                <a href="/settings">⚙️ الإعدادات</a>
+                <a href="/logout" style="color:var(--danger);">🚪 خروج</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header>
+                <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+                <h1>{% block page_title %}{% endblock %}</h1>
+            </header>
+            <div class="content">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+    <div id="toast" class="toast"></div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
