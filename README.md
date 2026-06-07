@@ -8,8 +8,8 @@ A full-featured, offline-capable web application for managing sales, purchases, 
 ## 📂 Project Structure
 
 ```
-
-commission-app/
+* **
+commission-system/
 ├── app.py                 # Flask application (API & business logic)
 ├── config.py              # Configuration (paths, secrets)
 ├── database.py            # Database connection & schema creation
@@ -42,7 +42,7 @@ commission-app/
 ├── reports.html       # Reports
 ├── activity_logs.html # Activity logs
 └── settings.html      # Settings
-
+* **
 ```
 
 ---
