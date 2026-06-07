@@ -1,4 +1,8 @@
+import os
+from dotenv import load_dotenv
 
-DATABASE_PATH = 'database.db'   # بدلاً من 'database.sql'
-SECRET_KEY = 'supersecretkey123'
+load_dotenv()
 
+DATABASE_PATH = "database.db"
+
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
