@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}التقارير{% endblock %}
+{% block page_title %}التقارير{% endblock %}
+{% block content %}
+<div class="card">
+    <h3>المبيعات الشهرية</h3>
+    <div id="salesTable"></div>
+    <button class="btn btn-primary" onclick="exportTable('orders','excel')">📥 تصدير Excel</button>
+</div>
+<div class="card">
+    <h3>منتجات منخفضة المخزون</h3>
+    <div id="lowStockTable"></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+async function loadReports() {
+    try {
+        const sales = await API.get('/api/reports/sales');
+        const colsSales = [
+            {key:'month', label:'الشهر'},
+            {key:'count', label:'عدد الطلبات'},
+            {key:'total', label:'الإجمالي'}
+        ];
+        renderTable('salesTable', colsSales, sales, sales.length, 1, 100, ()=>{}, () => '');
+
+        const lowStock = await API.get('/api/reports/low-stock');
+        const colsStock = [
+            {key:'name', label:'المنتج'},
+            {key:'quantity', label:'الكمية الحالية'}
+        ];
+        renderTable('lowStockTable', colsStock, lowStock, lowStock.length, 1, 100, ()=>{}, () => '');
+    } catch(e) { showToast(e.message, 'error'); }
+}
+document.addEventListener('DOMContentLoaded', loadReports);
+</script>
+{% endblock %}
